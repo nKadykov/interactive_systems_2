@@ -5,6 +5,10 @@ Window::Window(QWidget* parent) : QWidget(parent), m_timer(new QTimer(this)), m_
     m_table = new QTableWidget(this);
     m_table->setRowCount(20);
     m_table->setColumnCount(4);
+
+    m_cursor.setShape(Qt::UpArrowCursor);
+    setCursor(m_cursor);
+
     m_window_widget = new QWidget();
     QTableWidgetItem* item1 = new QTableWidgetItem;
     item1->setText(tr("Mode"));
@@ -37,6 +41,7 @@ Window::Window(QWidget* parent) : QWidget(parent), m_timer(new QTimer(this)), m_
     m_window_box = new QGroupBox;
     m_window_box->setLayout(m_window_layout);
     m_window_box->setFixedSize(QSize(1280, 720));
+    m_window_box->setCursor(m_cursor);
 
     m_table_box = new QGroupBox(tr("Table"));
     m_table_layout = new QGridLayout;
@@ -76,6 +81,23 @@ void Window::clickButton() {
 
     if(index > 20) {
         index = 1;
+    }
+
+    int x = 100;
+    int y = 100;
+
+    if(m_mode == Mode::FIRST)
+        m_cursor.setPos(x, y);
+    if(m_mode == Mode::SECOND) {
+        x = 10 + rand() % 900;
+        m_cursor.setPos(x, y);
+    }
+    if(m_mode == Mode::THIRD)
+        m_cursor.setPos(x, y);
+    if(m_mode == Mode::FOURTH) {
+        x = 100 + rand() % 900;
+        y = 100 + rand() % 500;
+        m_cursor.setPos(x, y);
     }
 
     QTableWidgetItem* item1 = new QTableWidgetItem;
@@ -167,7 +189,7 @@ void Window::timeHit() {
                 m_elapsed_time->start();
                 break;
             case Mode::SECOND:
-                m_button_x = rand() % 1000;
+                m_button_x = 1000;
                 m_button_y = 0;
                 new_button = createNewButton(tr(""), &Window::clickButton);
                 new_button->setGeometry(m_button_x, m_button_y, 100, 100);
@@ -176,7 +198,7 @@ void Window::timeHit() {
                 m_elapsed_time->start();
                 break;
             case Mode::THIRD:
-                m_button_x = rand() % 1000;
+                m_button_x = 1000;
                 m_button_y = 0;
                 new_button = createNewButton(tr(""), &Window::clickButton);
                 width = rand()%50;
@@ -186,8 +208,8 @@ void Window::timeHit() {
                 m_elapsed_time->start();
                 break;
             case Mode::FOURTH:
-                m_button_x = rand() % 1000;
-                m_button_y = rand() % 500;
+                m_button_x = 1000;
+                m_button_y = 0;
                 new_button = createNewButton(tr(""), &Window::clickButton);
                 new_button->setGeometry(m_button_x, m_button_y, 100, 100);
                 m_window_layout->addWidget(m_window_widget);

@@ -11,6 +11,7 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QCursor>
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -62,6 +63,7 @@ private:
     QWidget* m_buttons_widget;
     QVBoxLayout* m_buttons_layout;
     QGridLayout* m_main_layout;
+    QCursor m_cursor;
 
     int m_button_x = 0;
     int m_button_y = 0;
