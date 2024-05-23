@@ -25,6 +25,7 @@ public:
     void setMode();
     double countFitts();
     int getLength();
+    void resetTable();
 private slots:
     void clickButton();
     void timeHit();
@@ -37,14 +38,15 @@ private:
     enum class Mode {
         FIRST = 0,
         SECOND,
-        THIRD
+        THIRD,
+        FOURTH
     };
     bool m_is_created = false;
     QTimer* m_timer;
     QElapsedTimer* m_elapsed_time;
     Mode m_mode = Mode::FIRST;
     QTableWidget *m_table;
-    enum {NUMBER_MODE = 3};
+    enum {NUMBER_MODE = 4};
     Button* m_buttons_mode[NUMBER_MODE];
     int m_time = 0;
     int index = 1;

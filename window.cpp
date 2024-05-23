@@ -109,57 +109,42 @@ int Window::getLength() {
     return length;
 }
 
+void Window::resetTable() {
+    m_table->clear();
+    QTableWidgetItem* item1 = new QTableWidgetItem;
+    item1->setText(tr("Mode"));
+    m_table->setItem(0, 0, item1);
+    QTableWidgetItem* item2 = new QTableWidgetItem;
+    item2->setText(tr("Time"));
+    m_table->setItem(0, 1, item2);
+    QTableWidgetItem* item3 = new QTableWidgetItem;
+    item3->setText(tr("Fitts"));
+    m_table->setItem(0, 2, item3);
+    QTableWidgetItem* item4 = new QTableWidgetItem;
+    item4->setText(tr("Length"));
+    m_table->setItem(0, 3, item4);
+}
+
 void Window::setMode() {
     Button *clicked_button = qobject_cast<Button*>(sender());
     if(clicked_button == m_buttons_mode[0]) {
         m_mode = Mode::FIRST;
-        m_table->clear();
-        QTableWidgetItem* item1 = new QTableWidgetItem;
-        item1->setText(tr("Mode"));
-        m_table->setItem(0, 0, item1);
-        QTableWidgetItem* item2 = new QTableWidgetItem;
-        item2->setText(tr("Time"));
-        m_table->setItem(0, 1, item2);
-        QTableWidgetItem* item3 = new QTableWidgetItem;
-        item3->setText(tr("Fitts"));
-        m_table->setItem(0, 2, item3);
-        QTableWidgetItem* item4 = new QTableWidgetItem;
-        item4->setText(tr("Length"));
-        m_table->setItem(0, 3, item4);
+        resetTable();
         index = 1;
     }
     if(clicked_button == m_buttons_mode[1]) {
         m_mode = Mode::SECOND;
-        m_table->clear();
-        QTableWidgetItem* item1 = new QTableWidgetItem;
-        item1->setText(tr("Mode"));
-        m_table->setItem(0, 0, item1);
-        QTableWidgetItem* item2 = new QTableWidgetItem;
-        item2->setText(tr("Time"));
-        m_table->setItem(0, 1, item2);
-        QTableWidgetItem* item3 = new QTableWidgetItem;
-        item3->setText(tr("Fitts"));
-        m_table->setItem(0, 2, item3);
-        QTableWidgetItem* item4 = new QTableWidgetItem;
-        item4->setText(tr("Length"));
-        m_table->setItem(0, 3, item4);
+        resetTable();
         index = 1;
     }
     if(clicked_button == m_buttons_mode[2]) {
         m_mode = Mode::THIRD;
-        m_table->clear();
-        QTableWidgetItem* item1 = new QTableWidgetItem;
-        item1->setText(tr("Mode"));
-        m_table->setItem(0, 0, item1);
-        QTableWidgetItem* item2 = new QTableWidgetItem;
-        item2->setText(tr("Time"));
-        m_table->setItem(0, 1, item2);
-        QTableWidgetItem* item3 = new QTableWidgetItem;
-        item3->setText(tr("Fitts"));
-        m_table->setItem(0, 2, item3);
-        QTableWidgetItem* item4 = new QTableWidgetItem;
-        item4->setText(tr("Length"));
-        m_table->setItem(0, 3, item4);
+        resetTable();
+        index = 1;
+    }
+    if(clicked_button == m_buttons_mode[3]) {
+        m_mode = Mode::FOURTH;
+        resetTable();
         index = 1;
     }
 }
@@ -169,10 +154,11 @@ void Window::timeHit() {
     int elapsed = m_elapsed_time->elapsed();
     int index;
     int keyboard_part = 0;
+    int width;
     if(elapsed > time && (!m_is_created)) {
         switch (m_mode) {
             case Mode::FIRST:
-                m_button_x = 1150;
+                m_button_x = 1000;
                 m_button_y = 0;
                 new_button = createNewButton(tr(""), &Window::clickButton);
                 new_button->setGeometry(m_button_x, m_button_y, 100, 100);
@@ -181,7 +167,7 @@ void Window::timeHit() {
                 m_elapsed_time->start();
                 break;
             case Mode::SECOND:
-                m_button_x = rand() % 1150;
+                m_button_x = rand() % 1000;
                 m_button_y = 0;
                 new_button = createNewButton(tr(""), &Window::clickButton);
                 new_button->setGeometry(m_button_x, m_button_y, 100, 100);
@@ -190,7 +176,17 @@ void Window::timeHit() {
                 m_elapsed_time->start();
                 break;
             case Mode::THIRD:
-                m_button_x = rand() % 1150;
+                m_button_x = rand() % 1000;
+                m_button_y = 0;
+                new_button = createNewButton(tr(""), &Window::clickButton);
+                width = rand()%50;
+                new_button->setGeometry(m_button_x, m_button_y, 50 + width, 50 + width);
+                m_window_layout->addWidget(m_window_widget);
+                m_is_created = true;
+                m_elapsed_time->start();
+                break;
+            case Mode::FOURTH:
+                m_button_x = rand() % 1000;
                 m_button_y = rand() % 500;
                 new_button = createNewButton(tr(""), &Window::clickButton);
                 new_button->setGeometry(m_button_x, m_button_y, 100, 100);
