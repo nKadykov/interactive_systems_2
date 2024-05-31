@@ -7,7 +7,6 @@ Window::Window(QWidget* parent) : QWidget(parent), m_timer(new QTimer(this)), m_
     m_table->setColumnCount(4);
 
     m_cursor.setShape(Qt::UpArrowCursor);
-    setCursor(m_cursor);
 
     m_window_widget = new QWidget();
     QTableWidgetItem* item1 = new QTableWidgetItem;
@@ -58,6 +57,10 @@ Window::Window(QWidget* parent) : QWidget(parent), m_timer(new QTimer(this)), m_
     m_timer->setInterval(1000);
     m_elapsed_time->start();
     m_timer->start();
+
+    new_button = createNewButton(tr(""), &Window::clickButton);
+    new_button->setGeometry(m_button_x, m_button_y, 100, 100);
+    m_window_layout->addWidget(m_window_widget);
 }
 
 template<typename PointerToMemberFunction>
@@ -83,23 +86,6 @@ void Window::clickButton() {
         index = 1;
     }
 
-    int x = 100;
-    int y = 100;
-
-    if(m_mode == Mode::FIRST)
-        m_cursor.setPos(x, y);
-    if(m_mode == Mode::SECOND) {
-        x = 10 + rand() % 900;
-        m_cursor.setPos(x, y);
-    }
-    if(m_mode == Mode::THIRD)
-        m_cursor.setPos(x, y);
-    if(m_mode == Mode::FOURTH) {
-        x = 100 + rand() % 900;
-        y = 100 + rand() % 500;
-        m_cursor.setPos(x, y);
-    }
-
     QTableWidgetItem* item1 = new QTableWidgetItem;
     item1->setText(QString::number(static_cast<int>(m_mode) + 1));
     m_table->setItem(index, 0, item1);
@@ -112,14 +98,16 @@ void Window::clickButton() {
     QTableWidgetItem* item4 = new QTableWidgetItem;
     item4->setText(QString::number(this->getLength()));
     m_table->setItem(index, 3, item4);
-
     m_table->setItem(index, 2, item3);
+
+    m_cursor.setShape(Qt::ForbiddenCursor);
+    m_window_box->setCursor(m_cursor);
+
     m_elapsed_time->restart();
     index++;
-    m_window_layout->removeWidget(m_window_widget);
     m_window_widget = new QWidget();
-    m_button_x = 0;
-    clicked_button->deleteLater();
+
+    // clicked_button->deleteLater();
 }
 
 double Window::countFitts() {
@@ -127,7 +115,7 @@ double Window::countFitts() {
 }
 
 int Window::getLength() {
-    int length = qSqrt(qPow(m_button_x + 50, 2) + qPow(m_button_y + 50, 2));
+    int length = qSqrt(qPow(m_cursor_x + 50, 2) + qPow(m_cursor_y + 50, 2));
     return length;
 }
 
@@ -172,48 +160,55 @@ void Window::setMode() {
 }
 
 void Window::timeHit() {
-    int time = 500;
+    int time = 1000;
     int elapsed = m_elapsed_time->elapsed();
-    int index;
-    int keyboard_part = 0;
     int width;
+
+    int x = 50;
+    int y = 50;
+
     if(elapsed > time && (!m_is_created)) {
+        m_cursor.setShape(Qt::UpArrowCursor);
+        m_window_box->setCursor(m_cursor);
+
+        QPoint global_top_left_pos = m_window_box->mapToGlobal(m_window_box->rect().topLeft());
+        QPoint global_bottom_right_pos = m_window_box->mapToGlobal(m_window_box->rect().bottomRight());
+
+        if(m_mode == Mode::FIRST)
+            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
+        if(m_mode == Mode::SECOND) {
+            x = 10 + rand() % 900;
+            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
+        }
+        if(m_mode == Mode::THIRD)
+            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
+        if(m_mode == Mode::FOURTH) {
+            x = 100 + rand() % (global_bottom_right_pos.x() - global_top_left_pos.x());
+            y = 100 + rand() % (global_bottom_right_pos.y() - global_top_left_pos.y());
+            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
+        }
+        m_is_created = true;
         switch (m_mode) {
             case Mode::FIRST:
-                m_button_x = 1000;
-                m_button_y = 0;
-                new_button = createNewButton(tr(""), &Window::clickButton);
-                new_button->setGeometry(m_button_x, m_button_y, 100, 100);
-                m_window_layout->addWidget(m_window_widget);
-                m_is_created = true;
+                // m_window_layout->removeWidget(m_window_widget);
+                // m_window_layout->addWidget(m_window_widget);
                 m_elapsed_time->start();
                 break;
             case Mode::SECOND:
-                m_button_x = 1000;
-                m_button_y = 0;
-                new_button = createNewButton(tr(""), &Window::clickButton);
-                new_button->setGeometry(m_button_x, m_button_y, 100, 100);
-                m_window_layout->addWidget(m_window_widget);
-                m_is_created = true;
+                // m_window_layout->removeWidget(m_window_widget);
+                // m_window_layout->addWidget(m_window_widget);
                 m_elapsed_time->start();
                 break;
             case Mode::THIRD:
-                m_button_x = 1000;
-                m_button_y = 0;
-                new_button = createNewButton(tr(""), &Window::clickButton);
-                width = rand()%50;
+                width = rand() % 50;
                 new_button->setGeometry(m_button_x, m_button_y, 50 + width, 50 + width);
-                m_window_layout->addWidget(m_window_widget);
-                m_is_created = true;
+                // m_window_layout->removeWidget(m_window_widget);
+                // m_window_layout->addWidget(m_window_widget);
                 m_elapsed_time->start();
                 break;
             case Mode::FOURTH:
-                m_button_x = 1000;
-                m_button_y = 0;
-                new_button = createNewButton(tr(""), &Window::clickButton);
-                new_button->setGeometry(m_button_x, m_button_y, 100, 100);
-                m_window_layout->addWidget(m_window_widget);
-                m_is_created = true;
+                // m_window_layout->removeWidget(m_window_widget);
+                // m_window_layout->addWidget(m_window_widget);
                 m_elapsed_time->start();
                 break;
         }

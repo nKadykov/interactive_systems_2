@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QCursor>
+#include <QPoint>
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -65,8 +66,10 @@ private:
     QGridLayout* m_main_layout;
     QCursor m_cursor;
 
-    int m_button_x = 0;
+    int m_button_x = 1100;
     int m_button_y = 0;
+    int m_cursor_x = 50;
+    int m_cursor_y = 50;
 };
 
 #endif // WINDOW_H
