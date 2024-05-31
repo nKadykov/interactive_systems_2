@@ -111,11 +111,11 @@ void Window::clickButton() {
 }
 
 double Window::countFitts() {
-    return qLn(this->getLength() / 100 + 1) / qLn(2);
+    return qLn(this->getLength() / m_button_width + 1) / qLn(2);
 }
 
 int Window::getLength() {
-    int length = qSqrt(qPow(m_cursor_x + 50, 2) + qPow(m_cursor_y + 50, 2));
+    int length = qSqrt(qPow((m_button_x + m_button_width / 2) - m_cursor_x, 2) + qPow(m_cursor_y - (m_button_width / 2), 2));
     return length;
 }
 
@@ -162,10 +162,6 @@ void Window::setMode() {
 void Window::timeHit() {
     int time = 1000;
     int elapsed = m_elapsed_time->elapsed();
-    int width;
-
-    int x = 50;
-    int y = 50;
 
     if(elapsed > time && (!m_is_created)) {
         m_cursor.setShape(Qt::UpArrowCursor);
@@ -174,41 +170,32 @@ void Window::timeHit() {
         QPoint global_top_left_pos = m_window_box->mapToGlobal(m_window_box->rect().topLeft());
         QPoint global_bottom_right_pos = m_window_box->mapToGlobal(m_window_box->rect().bottomRight());
 
-        if(m_mode == Mode::FIRST)
-            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
-        if(m_mode == Mode::SECOND) {
-            x = 10 + rand() % 900;
-            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
-        }
-        if(m_mode == Mode::THIRD)
-            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
-        if(m_mode == Mode::FOURTH) {
-            x = 100 + rand() % (global_bottom_right_pos.x() - global_top_left_pos.x());
-            y = 100 + rand() % (global_bottom_right_pos.y() - global_top_left_pos.y());
-            m_cursor.setPos(global_top_left_pos.x() + x, global_top_left_pos.y() + y);
-        }
         m_is_created = true;
         switch (m_mode) {
             case Mode::FIRST:
-                // m_window_layout->removeWidget(m_window_widget);
-                // m_window_layout->addWidget(m_window_widget);
+                m_cursor_x = global_top_left_pos.x() + 50;
+                m_cursor_y = global_top_left_pos.y() + 50;
+                m_cursor.setPos(m_cursor_x, m_cursor_y);
                 m_elapsed_time->start();
                 break;
             case Mode::SECOND:
-                // m_window_layout->removeWidget(m_window_widget);
-                // m_window_layout->addWidget(m_window_widget);
+                m_cursor_x = global_top_left_pos.x() + 50 + rand() % 900;
+                m_cursor_y = global_top_left_pos.y() + 50;
+                m_cursor.setPos(m_cursor_x, m_cursor_y);
                 m_elapsed_time->start();
                 break;
             case Mode::THIRD:
-                width = rand() % 50;
-                new_button->setGeometry(m_button_x, m_button_y, 50 + width, 50 + width);
-                // m_window_layout->removeWidget(m_window_widget);
-                // m_window_layout->addWidget(m_window_widget);
+                m_cursor_x = global_top_left_pos.x() + 50;
+                m_cursor_y = global_top_left_pos.y() + 50;
+                m_cursor.setPos(m_cursor_x, m_cursor_y);
+                m_button_width = 50 + rand() % 50;
+                new_button->setGeometry(m_button_x, m_button_y, m_button_width, m_button_width);
                 m_elapsed_time->start();
                 break;
             case Mode::FOURTH:
-                // m_window_layout->removeWidget(m_window_widget);
-                // m_window_layout->addWidget(m_window_widget);
+                m_cursor_x = global_top_left_pos.x() + rand() % (global_bottom_right_pos.x() - global_top_left_pos.x());
+                m_cursor_y = global_top_left_pos.y() + rand() % (global_bottom_right_pos.y() - global_top_left_pos.y());
+                m_cursor.setPos(m_cursor_x, m_cursor_y);
                 m_elapsed_time->start();
                 break;
         }

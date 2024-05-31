@@ -70,6 +70,7 @@ private:
     int m_button_y = 0;
     int m_cursor_x = 50;
     int m_cursor_y = 50;
+    int m_button_width = 100;
 };
 
 #endif // WINDOW_H
