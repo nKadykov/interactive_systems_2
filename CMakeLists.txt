@@ -13,7 +13,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        main.cpp
+        src/main.cpp
 
 
 )
@@ -22,8 +22,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(interactive_systems_2
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        button.h button.cpp
-        window.h window.cpp
+        src/button.h src/button.cpp
+        src/window.h src/window.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET interactive_systems_2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
