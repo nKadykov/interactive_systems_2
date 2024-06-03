@@ -173,15 +173,19 @@ void Window::timeHit() {
         m_is_created = true;
         switch (m_mode) {
             case Mode::FIRST:
+                m_button_width = 100;
                 m_cursor_x = global_top_left_pos.x() + 50;
                 m_cursor_y = global_top_left_pos.y() + 50;
                 m_cursor.setPos(m_cursor_x, m_cursor_y);
+                new_button->setGeometry(m_button_x, m_button_y, m_button_width, m_button_width);
                 m_elapsed_time->start();
                 break;
             case Mode::SECOND:
+                m_button_width = 100;
                 m_cursor_x = global_top_left_pos.x() + 50 + rand() % 900;
                 m_cursor_y = global_top_left_pos.y() + 50;
                 m_cursor.setPos(m_cursor_x, m_cursor_y);
+                new_button->setGeometry(m_button_x, m_button_y, m_button_width, m_button_width);
                 m_elapsed_time->start();
                 break;
             case Mode::THIRD:
@@ -193,8 +197,10 @@ void Window::timeHit() {
                 m_elapsed_time->start();
                 break;
             case Mode::FOURTH:
+                m_button_width = 100;
                 m_cursor_x = global_top_left_pos.x() + rand() % (global_bottom_right_pos.x() - global_top_left_pos.x());
                 m_cursor_y = global_top_left_pos.y() + rand() % (global_bottom_right_pos.y() - global_top_left_pos.y());
+                new_button->setGeometry(m_button_x, m_button_y, m_button_width, m_button_width);
                 m_cursor.setPos(m_cursor_x, m_cursor_y);
                 m_elapsed_time->start();
                 break;
